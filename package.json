@@ -6,7 +6,6 @@
   "browser": "lib/browser.js",
   "scripts": {
     "test": "npm run lint && node test/node-test",
-    "build": "browserify lib/browser.js | uglifyjs > dist/audio-loader.min.js && ls -hall dist/",
     "lint": "eslint lib/*.js",
     "api": "jsdoc2md lib/index.js > API.md",
     "browser-example": "budo example/browser.js"
@@ -43,7 +42,6 @@
     "audio-lena": "^2.1.1",
     "browserify": "^17.0.0",
     "eslint": "^7.12.0",
-    "tape": "^5.0.1",
-    "uglify-js": "^3.11.3"
+    "tape": "^5.0.1"
   }
 }

@@ -1,3 +1,5 @@
-node_modules/
-example/
-tmp/
+.*
+/dr.pogodin-audio-loader-*.tgz
+/node_modules/
+/example/
+/test/
