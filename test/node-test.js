@@ -4,7 +4,7 @@ var isBuffer = require('is-audio-buffer')
 var load = require('..')
 var wavBuffer = require('audio-lena/wav')
 var mp3Buffer = require('audio-lena/mp3')
-var rawBuffer = require('audio-lena/buffer')
+var rawBuffer = require('audio-lena/raw')
 var t = require('tape')
 var path = require('path')
 
