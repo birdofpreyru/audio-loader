@@ -3,3 +3,4 @@ tmp/
 API.md
 npm-debug.log
 /dr.pogodin-audio-loader-*.tgz
+/dist
