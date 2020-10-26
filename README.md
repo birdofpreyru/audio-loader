@@ -118,7 +118,6 @@ If it's a function it receives the file name and should return the url as string
 - __only__ {Array} - when loading objects, if provided, only the given keys
 will be included in the decoded object:
 `load('piano.json', { only: ['C2', 'D2'] })`
-- __context__ {AudioContext}: (browser only) The audio context to use. By default uses [`audio-context`](https://www.npmjs.com/package/audio-context)
 - __decode__ {Function}: a function to decode audio. It receives a buffer and must return a promise to an audio buffer.
 - __fetch__ {Function}: a function to fetch files. It receives an url and a response type (one of 'arraybuffer' or 'text') and must return a promise to the contents
 

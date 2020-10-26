@@ -1,6 +1,3 @@
-node_modules/
-tmp/
-API.md
-npm-debug.log
+/build/
 /dr.pogodin-audio-loader-*.tgz
-/dist
+/node_modules/
