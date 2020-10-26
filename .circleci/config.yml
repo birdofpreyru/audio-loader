@@ -15,11 +15,18 @@ jobs:
           key: node-modules-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
+      - run: npm run build
       - run: npm test
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build
   release:
     <<: *defaults
     steps:
       - checkout
+      - attach_workspace:
+          at: .
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
       - run: npm publish --access public
 

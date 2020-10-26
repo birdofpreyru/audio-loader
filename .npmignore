@@ -1,5 +1,7 @@
 .*
+/babel.*config.js
+/config/
 /dr.pogodin-audio-loader-*.tgz
 /node_modules/
-/example/
+/src/
 /test/
