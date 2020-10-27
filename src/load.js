@@ -1,5 +1,5 @@
 import isBuffer from 'is-buffer';
-import base64 from './base64';
+import { decode } from './base64';
 
 // Given a regex, return a function that test if against a string
 function fromRegex(r) {
@@ -103,7 +103,7 @@ function loadJsonFile(name, options) {
 const isBase64Audio = fromRegex(/^data:audio/);
 function loadBase64Audio(source, options) {
   const i = source.indexOf(',');
-  return load(base64.decode(source.slice(i + 1)).buffer, options);
+  return load(decode(source.slice(i + 1)).buffer, options);
 }
 
 // convert a MIDI.js javascript soundfont file to json

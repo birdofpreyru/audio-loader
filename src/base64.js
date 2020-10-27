@@ -10,7 +10,7 @@ function b64ToUint6(nChr) {
 
 // Decode Base64 to Uint8Array
 // ---------------------------
-export default function decode(sBase64, nBlocksSize) {
+export function decode(sBase64, nBlocksSize) {
   const sB64Enc = sBase64.replace(/[^A-Za-z0-9+/]/g, '');
   const nInLen = sB64Enc.length;
   const nOutLen = nBlocksSize
@@ -34,3 +34,5 @@ export default function decode(sBase64, nBlocksSize) {
   }
   return taBytes;
 }
+
+export default undefined;
