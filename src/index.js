@@ -1,19 +1,20 @@
-import fs from 'fs';
-
 import axios from 'axios';
-import isAbsolute from 'is-absolute';
-import isRelative from 'is-relative';
-import isURL from 'is-url';
-
 import decode from 'audio-decode';
-import 'aac'; // Note: this import MUST BE after the "audio-decode" one.
+import isUrl from 'is-url';
 
 import load from './load';
+import { IS_CLIENT_SIDE, requireWeak } from './utils';
 
-function isPath(url) {
-  return isAbsolute(url) || (isRelative(url) && !isURL(url));
+let fs;
+if (!IS_CLIENT_SIDE) {
+  fs = requireWeak('fs');
+  requireWeak('aac');
 }
 
+/**
+ * Server-side only!.
+ * @param {string} url
+ */
 function readFile(url) {
   return new Promise((resolve, reject) => {
     fs.readFile(url, (error, data) => {
@@ -30,7 +31,7 @@ async function sendRequest(url, type) {
 }
 
 function fetch(url, type) {
-  return isPath(url) ? readFile(url) : sendRequest(url, type);
+  return IS_CLIENT_SIDE || isUrl(url) ? sendRequest(url, type) : readFile(url);
 }
 
 /**
