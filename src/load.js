@@ -50,7 +50,12 @@ export default async function load(source, options = {}, defVal) {
 // Load (decode) an array buffer
 function isArrayBuffer(o) { return o instanceof ArrayBuffer; }
 function decodeBuffer(array, options) {
-  return options.decode(array);
+  return new Promise((resolve, reject) => {
+    options.decode(array, (error, result) => {
+      if (error) reject(error);
+      else resolve(result);
+    });
+  });
 }
 
 // Load an audio filename
