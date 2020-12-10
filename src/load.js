@@ -50,10 +50,6 @@ export default async function load(source, options = {}, defVal) {
 // Load (decode) an array buffer
 function isArrayBuffer(o) { return o instanceof ArrayBuffer; }
 function decodeBuffer(array, options) {
-  // TODO: This was wrapped into a promise because of a problem when running
-  // on iOS (Safari). Probably, it can be simplified back to just returning
-  // options.decode(array), and changing the function signature to async,
-  // but that should be tested on iOS.
   return new Promise((resolve, reject) => {
     options.decode(array, (error, result) => {
       if (error) reject(error);
@@ -115,15 +111,40 @@ function loadBase64Audio(source, options) {
   return load(decode(source.slice(i + 1)).buffer, options);
 }
 
-// convert a MIDI.js javascript soundfont file to json
+/**
+ * Converts MIDI.js data from string to JS object.
+ * @param {string} data
+ * @return {Object}
+ */
 function midiJsToJson(data) {
+  const onInvalidFormat = () => {
+    throw Error('Invalid MIDI.js Soundfont format');
+  };
+
   let begin = data.indexOf('MIDI.Soundfont.');
-  if (begin < 0) throw Error('Invalid MIDI.js Soundfont format');
-  begin = 1 + data.indexOf('=', begin);
-  const end = 1 + data.lastIndexOf('}');
-  /* eslint-disable no-new-func */
-  return Function(`"use strict";return (${data.slice(begin, end)})`)();
-  /* eslint-enable no-new-func */
+  if (begin < 0) onInvalidFormat();
+
+  // Extracts from "data" the next token within double commas, advances
+  // the "begin" position pointer to post the closing token commas, and
+  // returns the token.
+  const getNextToken = () => {
+    begin = 1 + data.indexOf('"', begin);
+    if (!begin) return null;
+    const end = data.indexOf('"', begin);
+    if (end < begin) onInvalidFormat();
+    const token = data.slice(begin, end);
+    begin = 1 + end;
+    return token;
+  };
+
+  const res = {};
+  for (;;) {
+    const key = getNextToken();
+    if (!key) return res;
+    const sample = getNextToken();
+    if (!sample) onInvalidFormat();
+    res[key] = sample;
+  }
 }
 
 // Load .js files with MidiJS soundfont prerendered audio
