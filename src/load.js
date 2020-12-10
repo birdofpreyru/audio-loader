@@ -50,6 +50,10 @@ export default async function load(source, options = {}, defVal) {
 // Load (decode) an array buffer
 function isArrayBuffer(o) { return o instanceof ArrayBuffer; }
 function decodeBuffer(array, options) {
+  // TODO: This was wrapped into a promise because of a problem when running
+  // on iOS (Safari). Probably, it can be simplified back to just returning
+  // options.decode(array), and changing the function signature to async,
+  // but that should be tested on iOS.
   return new Promise((resolve, reject) => {
     options.decode(array, (error, result) => {
       if (error) reject(error);

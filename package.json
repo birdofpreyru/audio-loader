@@ -1,6 +1,6 @@
 {
   "name": "@dr.pogodin/audio-loader",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "A flexible web audio sample loader for browser and node",
   "main": "index.js",
   "browser": "lib/browser.js",
@@ -38,14 +38,14 @@
     "is-url": "^1.2.4"
   },
   "devDependencies": {
-    "@babel/cli": "^7.12.1",
-    "@babel/core": "^7.12.3",
-    "@babel/node": "^7.12.6",
-    "@babel/plugin-transform-runtime": "^7.12.1",
-    "@babel/preset-env": "^7.12.1",
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/node": "^7.12.10",
+    "@babel/plugin-transform-runtime": "^7.12.10",
+    "@babel/preset-env": "^7.12.10",
     "audio-lena": "^2.1.1",
-    "eslint": "^7.12.1",
-    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint": "^7.15.0",
+    "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
     "rimraf": "^3.0.2",
     "tape": "^5.0.1"
