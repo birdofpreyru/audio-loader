@@ -1,8 +1,16 @@
 # Audio Loader
 
-_A patched fork of [`audio-loader`](https://www.npmjs.com/package/audio-loader) library._
+It used to be a patched fork of
+[`audio-loader`](https://www.npmjs.com/package/audio-loader) library,
+but starting from `v1.2.0` it has been refactored to drop NodeJS support,
+and thanks to that to use the minimum of dependencies (many of which were
+not actively maintained).
 
-An simple and flexible audio buffer loader for browser **and node**:
+There are also some changes in the API.
+
+**ORIGINAL README BELOW, IT IS PENDING AN UPDATE**
+
+An simple and flexible audio buffer loader for browser.
 
 ```js
 var load = require('@dr.pogodin/audio-loader')
@@ -102,7 +110,7 @@ load('acoustic_grand_piano-ogg.js').then(function (buffers) {
 This is a repository of them: https://github.com/gleitz/midi-js-soundfonts
 
 #### API
-### `load(source, [options])`
+### `load(source, options)`
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -111,13 +119,15 @@ This is a repository of them: https://github.com/gleitz/midi-js-soundfonts
 
 Possible `options` keys are:
 
-- __from__ {Function|String}: a function or string to convert from file names to urls.
-If is a string it will be prefixed to the name:
-`load('snare.mp3', { from: 'http://audio.net/samples/' })`
-If it's a function it receives the file name and should return the url as string.
-- __only__ {Array} - when loading objects, if provided, only the given keys
-will be included in the decoded object:
-`load('piano.json', { only: ['C2', 'D2'] })`
+- `from?: function|string` &ndash; Optional. A function or string to convert
+  from file names to urls.
+  If is a string it will be prefixed to the name:
+  `load('snare.mp3', { from: 'http://audio.net/samples/' })`
+  If it's a function it receives the file name and should return the url as
+  string.
+- `only?: {Array} - Optional. When loading objects, if provided, only the given
+  keys will be included in the decoded object:
+  `load('piano.json', { only: ['C2', 'D2'] })`
 - __decode__ {Function}: a function to decode audio. It receives a buffer and must return a promise to an audio buffer.
 - __fetch__ {Function}: a function to fetch files. It receives an url and a response type (one of 'arraybuffer' or 'text') and must return a promise to the contents
 
@@ -135,12 +145,6 @@ To run the browser example:
 ```bash
 npm i -g budo
 npm run browser-example
-```
-
-To run the node (audiojs) example:
-
-```bash
-node example/node.js
 ```
 
 ## License

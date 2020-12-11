@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`loads MIDI.js soundfont 1`] = `
+Object {
+  "A0": Uint8Array [
+    49,
+  ],
+  "B0": Uint8Array [
+    51,
+  ],
+  "Bb0": Uint8Array [
+    50,
+  ],
+  "C1": Uint8Array [
+    67,
+    49,
+  ],
+  "Db1": Uint8Array [
+    68,
+    98,
+    49,
+  ],
+}
+`;
+
+exports[`refuses to work without AudioContext provided 1`] = `"Cannot read property 'context' of undefined"`;
+
+exports[`refuses to work without AudioContext provided 2`] = `"Missing \\"context\\" option"`;

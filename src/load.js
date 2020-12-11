@@ -1,5 +1,4 @@
-import isBuffer from 'is-buffer';
-import { decode } from './base64';
+/* global atob */
 
 // Given a regex, return a function that test if against a string
 function fromRegex(r) {
@@ -47,11 +46,15 @@ export default async function load(source, options = {}, defVal) {
 // BASIC AUDIO LOADING
 // ===================
 
-// Load (decode) an array buffer
-function isArrayBuffer(o) { return o instanceof ArrayBuffer; }
-function decodeBuffer(array, options) {
+/**
+ * Loads (decodes) an array buffer holding an audio sample.
+ * @param {ArrayBuffer} array Input buffer with encoded sample.
+ * @param {AudioContext} context AudioContext instance to use for decoding.
+ * @return {ArrayBuffer} Resulting buffer with decoded sample.
+ */
+function decodeBuffer(array, { context }) {
   return new Promise((resolve, reject) => {
-    options.decode(array, (error, result) => {
+    context.decodeAudioData(array, (error, result) => {
       if (error) reject(error);
       else resolve(result);
     });
@@ -107,8 +110,13 @@ function loadJsonFile(name, options) {
 // Load strings with Base64 encoded audio
 const isBase64Audio = fromRegex(/^data:audio/);
 function loadBase64Audio(source, options) {
-  const i = source.indexOf(',');
-  return load(decode(source.slice(i + 1)).buffer, options);
+  // The Base64-encoded payload in source is expected to be prefixed by
+  // "data:audio/mp3;base64," or something similar.
+  const start = source.indexOf(',');
+  const data = atob(source.slice(1 + start));
+  const buffer = new Uint8Array(data.length);
+  for (let i = 0; i < data.length; ++i) buffer[i] = data.charCodeAt(i);
+  return load(buffer, options);
 }
 
 /**
@@ -117,34 +125,13 @@ function loadBase64Audio(source, options) {
  * @return {Object}
  */
 function midiJsToJson(data) {
-  const onInvalidFormat = () => {
-    throw Error('Invalid MIDI.js Soundfont format');
-  };
-
   let begin = data.indexOf('MIDI.Soundfont.');
-  if (begin < 0) onInvalidFormat();
-
-  // Extracts from "data" the next token within double commas, advances
-  // the "begin" position pointer to post the closing token commas, and
-  // returns the token.
-  const getNextToken = () => {
-    begin = 1 + data.indexOf('"', begin);
-    if (!begin) return null;
-    const end = data.indexOf('"', begin);
-    if (end < begin) onInvalidFormat();
-    const token = data.slice(begin, end);
-    begin = 1 + end;
-    return token;
-  };
-
-  const res = {};
-  for (;;) {
-    const key = getNextToken();
-    if (!key) return res;
-    const sample = getNextToken();
-    if (!sample) onInvalidFormat();
-    res[key] = sample;
-  }
+  if (begin < 0) throw Error('Invalid MIDI.js Soundfont format');
+  begin = 1 + data.indexOf('=', begin);
+  const end = 1 + data.lastIndexOf('}');
+  /* eslint-disable no-new-func */
+  return Function(`return (${data.slice(begin, end)})`)();
+  /* eslint-enable no-new-func */
 }
 
 // Load .js files with MidiJS soundfont prerendered audio
@@ -161,7 +148,7 @@ function loadMidiJSFile(name, options) {
  */
 selectLoader = (source) => {
   // Basic audio loading
-  if (isArrayBuffer(source) || isBuffer(source)) return decodeBuffer;
+  if (source instanceof Uint8Array) return decodeBuffer;
   if (isAudioFileName(source)) return loadAudioFile;
   if (isPromise(source)) return loadPromise;
 
