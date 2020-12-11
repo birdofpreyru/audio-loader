@@ -114,8 +114,9 @@ function loadBase64Audio(source, options) {
   // "data:audio/mp3;base64," or something similar.
   const start = source.indexOf(',');
   const data = atob(source.slice(1 + start));
-  const buffer = new Uint8Array(data.length);
-  for (let i = 0; i < data.length; ++i) buffer[i] = data.charCodeAt(i);
+  const buffer = new ArrayBuffer(data.length);
+  const uint8 = new Uint8Array(buffer);
+  for (let i = 0; i < data.length; ++i) uint8[i] = data.charCodeAt(i);
   return load(buffer, options);
 }
 
@@ -148,7 +149,7 @@ function loadMidiJSFile(name, options) {
  */
 selectLoader = (source) => {
   // Basic audio loading
-  if (source instanceof Uint8Array) return decodeBuffer;
+  if (source instanceof ArrayBuffer) return decodeBuffer;
   if (isAudioFileName(source)) return loadAudioFile;
   if (isPromise(source)) return loadPromise;
 

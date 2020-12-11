@@ -8,7 +8,7 @@ import audioLoader from '../src';
 
 const MockAudioContext = {
   decodeAudioData: jest.fn((array, callback) => {
-    if (array instanceof Uint8Array) callback(null, array.slice(0));
+    if (array instanceof ArrayBuffer) callback(null, array.slice(0));
     else callback(Error('Invalid "array" type'));
   }),
 };
@@ -27,6 +27,10 @@ it('loads MIDI.js soundfont', async () => {
   });
   soundfont = await soundfont;
   expect(MockAudioContext.decodeAudioData).toHaveBeenCalled();
+  expect(soundfont).toMatchSnapshot();
+  Object.keys(soundfont).forEach((key) => {
+    soundfont[key] = new Uint8Array(soundfont[key]);
+  });
   expect(soundfont).toMatchSnapshot();
 });
 

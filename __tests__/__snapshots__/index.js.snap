@@ -2,6 +2,16 @@
 
 exports[`loads MIDI.js soundfont 1`] = `
 Object {
+  "A0": ArrayBuffer [],
+  "B0": ArrayBuffer [],
+  "Bb0": ArrayBuffer [],
+  "C1": ArrayBuffer [],
+  "Db1": ArrayBuffer [],
+}
+`;
+
+exports[`loads MIDI.js soundfont 2`] = `
+Object {
   "A0": Uint8Array [
     49,
   ],
