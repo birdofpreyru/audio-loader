@@ -7,9 +7,9 @@ import mockAxios from 'jest-mock-axios';
 import audioLoader from '../src';
 
 const MockAudioContext = {
-  decodeAudioData: jest.fn((array, callback) => {
-    if (array instanceof ArrayBuffer) callback(null, array.slice(0));
-    else callback(Error('Invalid "array" type'));
+  decodeAudioData: jest.fn((array, onSuccess, onError) => {
+    if (array instanceof ArrayBuffer) onSuccess(array.slice(0));
+    else onError(Error('Invalid array'));
   }),
 };
 

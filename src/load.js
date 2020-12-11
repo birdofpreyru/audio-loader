@@ -53,12 +53,9 @@ export default async function load(source, options = {}, defVal) {
  * @return {ArrayBuffer} Resulting buffer with decoded sample.
  */
 function decodeBuffer(array, { context }) {
-  return new Promise((resolve, reject) => {
-    context.decodeAudioData(array, (error, result) => {
-      if (error) reject(error);
-      else resolve(result);
-    });
-  });
+  return new Promise(
+    (resolve, reject) => context.decodeAudioData(array, resolve, reject),
+  );
 }
 
 // Load an audio filename
