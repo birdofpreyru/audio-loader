@@ -36,3 +36,5 @@ Object {
 exports[`refuses to work without AudioContext provided 1`] = `"Cannot read property 'context' of undefined"`;
 
 exports[`refuses to work without AudioContext provided 2`] = `"Missing \\"context\\" option"`;
+
+exports[`throws error on network issues 1`] = `"Test network error"`;
