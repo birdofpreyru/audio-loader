@@ -127,9 +127,17 @@ function midiJsToJson(data) {
   if (begin < 0) throw Error('Invalid MIDI.js Soundfont format');
   begin = 1 + data.indexOf('=', begin);
   const end = 1 + data.lastIndexOf('}');
-  /* eslint-disable no-new-func */
-  return Function(`return (${data.slice(begin, end)})`)();
-  /* eslint-enable no-new-func */
+
+  // TODO: The try/catch blog is added temporarily. Sometimes for some users
+  // the wrapped code fails in a misterious way, thus for now this try/catch
+  // injects extra data into thrown errors to help triaging the issue.
+  try {
+    /* eslint-disable no-new-func */
+    return Function(`"use strict";return (${data.slice(begin, end)})`)();
+    /* eslint-enable no-new-func */
+  } catch (error) {
+    throw Error(`${error.message}; INPUT_DATA = ${data}`);
+  }
 }
 
 // Load .js files with MidiJS soundfont prerendered audio
