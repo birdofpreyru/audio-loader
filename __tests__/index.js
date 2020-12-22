@@ -45,5 +45,5 @@ it('refuses to work without AudioContext provided', () => {
 it('throws error on network issues', async () => {
   const soundfont = audioLoader(PIANO_JS_URL, { context: MockAudioContext });
   mockAxios.mockError(Error('Test network error'));
-  expect(soundfont).rejects.toThrowErrorMatchingSnapshot();
+  await expect(soundfont).rejects.toThrowErrorMatchingSnapshot();
 });
